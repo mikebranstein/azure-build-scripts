@@ -1,5 +1,6 @@
 variable "tenant_id" { }
 variable "subscription_id" { }
+variable "vm_base_name" { default = "workshop" }
 
 provider "azurerm" {
     tenant_id       = "${var.tenant_id}"
@@ -8,7 +9,7 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "rg" {
-    name = "tf-az-workshop-rg"
+    name = "tf-az-${var.vm_base_name}-rg"
     location = "East US"
 }
 
@@ -17,7 +18,7 @@ locals {
 }
 
 resource "azurerm_virtual_network" "vnet" {
-  name                = "tf-az-workshop-nvet"
+  name                = "tf-az-${var.vm_base_name}-nvet"
   address_space       = ["10.0.0.0/16"]
   location            = "${azurerm_resource_group.rg.location}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
@@ -31,12 +32,12 @@ resource "azurerm_subnet" "subnet" {
 }
 
 resource "azurerm_network_interface" "nic" {
-  name                = "tf-az-workshop-vm-nic"
+  name                = "tf-az-${var.vm_base_name}-vm-nic"
   location            = "${azurerm_resource_group.rg.location}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
 
   ip_configuration {
-    name                          = "tf-az-workshop-vm-nic-ip-config"
+    name                          = "tf-az-${var.vm_base_name}-vm-nic-ip-config"
     subnet_id                     = "${azurerm_subnet.subnet.id}"
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = "${azurerm_public_ip.pip.id}"
@@ -44,14 +45,14 @@ resource "azurerm_network_interface" "nic" {
 }
 
 resource "azurerm_public_ip" "pip" {
-  name                = "tf-az-workshop-vm-pip"
+  name                = "tf-az-${var.vm_base_name}-vm-pip"
   location            = "${azurerm_resource_group.rg.location}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
   allocation_method   = "Dynamic"
 }
 
 resource "azurerm_virtual_machine" "vm" {
-  name                  = "tf-az-workshop-vm"
+  name                  = "tf-az-${var.vm_base_name}-vm"
   location              = "${azurerm_resource_group.rg.location}"
   resource_group_name   = "${azurerm_resource_group.rg.name}"
   network_interface_ids = ["${azurerm_network_interface.nic.id}"]
@@ -67,13 +68,13 @@ resource "azurerm_virtual_machine" "vm" {
     version   = "latest"
   }
   storage_os_disk {
-    name              = "tfazworkshopvmdisk01"
+    name              = "tfaz${var.vm_base_name}vmdisk01"
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "StandardSSD_LRS"
   }
   os_profile {
-    computer_name  = "workshop-vm"
+    computer_name  = "${var.vm_base_name}-vm"
     admin_username = "workshopadmin"
     admin_password = "P.$$w0rd1234"
   }
