@@ -45,13 +45,9 @@ resource "azurerm_network_interface" "nic" {
   resource_group_name = "${azurerm_resource_group.rg.name}"
 
   ip_configuration {
-    name                          = "tf-az-workshop-vm-nic-priv-config"
+    name                          = "tf-az-workshop-vm-nic-ip-config"
     subnet_id                     = "${azurerm_subnet.subnet.id}"
     private_ip_address_allocation = "Dynamic"
-  }
-
-  ip_configuration {
-    name                          = "tf-az-workshop-vm-nic-pub-config"
     public_ip_address_id          = "${azurerm_public_ip.pip.id}"
   }
 }
