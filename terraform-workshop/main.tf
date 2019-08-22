@@ -1,3 +1,7 @@
+variable "tenant_id" { }
+variable "subscription_id" { }
+
+
 
 provider "azurerm" {
     tenant_id       = "${var.tenant_id}"
