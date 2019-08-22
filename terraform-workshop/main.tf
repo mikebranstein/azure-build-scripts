@@ -86,9 +86,10 @@ resource "azurerm_virtual_machine_extension" "ext_install_terraform" {
   name                 = "tf-az-install-terraform-vm-ext"
   location             = "${azurerm_resource_group.rg.location}"
   resource_group_name  = "${azurerm_resource_group.rg.name}"
-  publisher            = "Microsoft.Compute"
-  type                 = "CustomScriptExtension"
-  type_handler_version = "1.9"
+  virtual_machine_name = "${azurerm_virtual_machine.vm.name}"
+  publisher            = "Microsoft.Azure.Extensions"
+  type                 = "CustomScript"
+  type_handler_version = "2.0"
 
   # CustomVMExtension Documetnation: https://docs.microsoft.com/en-us/azure/virtual-machines/extensions/custom-script-windows
 
