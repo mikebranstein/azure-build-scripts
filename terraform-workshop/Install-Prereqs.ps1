@@ -8,4 +8,4 @@ choco install terraform -y
 choco install vscode -y
 
 # Visual Studio 2019 Community
-choco install visualstudio2019community --package-parameters "--allWorkloads --includeRecommended --includeOptional --passive --locale en-US"
+#choco install visualstudio2019community --package-parameters "--allWorkloads --includeRecommended --includeOptional --passive --locale en-US"
