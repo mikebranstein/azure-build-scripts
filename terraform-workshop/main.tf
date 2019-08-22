@@ -70,7 +70,7 @@ resource "azurerm_virtual_machine" "vm" {
     name              = "tfazworkshopvmdisk01"
     caching           = "ReadWrite"
     create_option     = "FromImage"
-    managed_disk_type = "Standard_SSD"
+    managed_disk_type = "StandardSSD_LRS"
   }
   os_profile {
     computer_name  = "workshop-vm"
@@ -81,3 +81,4 @@ resource "azurerm_virtual_machine" "vm" {
       provision_vm_agent = true
   }
 }
+
