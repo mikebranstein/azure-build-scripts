@@ -86,4 +86,7 @@ resource "azurerm_virtual_machine" "vm" {
     admin_username = "workshopadmin"
     admin_password = "P.$$w0rd1234"
   }
+  os_profile_windows_config {
+      provision_vm_agent = true
+  }
 }
