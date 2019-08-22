@@ -100,8 +100,8 @@ resource "azurerm_virtual_machine_extension" "ext_install_terraform" {
 SETTINGS
   protected_settings = <<PROTECTED_SETTINGS
     {
-      "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File Install-Terraform.ps1",
+      "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File Install-Terraform.ps1"
     }
-  PROTECTED_SETTINGS
+PROTECTED_SETTINGS
   depends_on = ["azurerm_virtual_machine.vm"]
 }
