@@ -84,7 +84,6 @@ resource "azurerm_virtual_machine" "vm" {
 
 resource "azurerm_virtual_machine_extension" "ext_install_terraform" {
   name                 = "tf-az-install-terraform-vm-ext"
-  location             = "EastUS"
   location             = "${azurerm_resource_group.rg.location}"
   resource_group_name  = "${azurerm_resource_group.rg.name}"
   publisher            = "Microsoft.Compute"
