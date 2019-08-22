@@ -106,3 +106,27 @@ SETTINGS
 PROTECTED_SETTINGS
   depends_on = ["azurerm_virtual_machine.vm"]
 }
+
+resource "azurerm_virtual_machine_extension" "ext_install_vscode" {
+  name                 = "tf-az-install-vscode-vm-ext"
+  location             = "${azurerm_resource_group.rg.location}"
+  resource_group_name  = "${azurerm_resource_group.rg.name}"
+  virtual_machine_name = "${azurerm_virtual_machine.vm.name}"
+  publisher            = "Microsoft.Compute"
+  type                 = "CustomScriptExtension"
+  type_handler_version = "1.9"
+
+  # CustomVMExtension Documetnation: https://docs.microsoft.com/en-us/azure/virtual-machines/extensions/custom-script-windows
+
+  settings = <<SETTINGS
+    {
+        "fileUris": ["https://raw.githubusercontent.com/mikebranstein/azure-build-scripts/master/terraform-workshop/Install-VSCode.ps1"]
+    }
+SETTINGS
+  protected_settings = <<PROTECTED_SETTINGS
+    {
+      "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File Install-VSCode.ps1"
+    }
+PROTECTED_SETTINGS
+  depends_on = ["azurerm_virtual_machine_extension.ext_install_terraform"]
+}
