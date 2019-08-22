@@ -16,15 +16,6 @@ locals {
     random_hash = substr(md5(azurerm_resource_group.rg.id), 0, 5)
 }
 
-resource "azurerm_storage_account" "sa" {
-  name                     = "tfazworkshopsa${local.random_hash}"
-  resource_group_name      = "${azurerm_resource_group.rg.name}"
-  location                 = "${azurerm_resource_group.rg.location}"
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-}
-
-
 resource "azurerm_virtual_network" "vnet" {
   name                = "tf-az-workshop-nvet"
   address_space       = ["10.0.0.0/16"]
