@@ -82,3 +82,26 @@ resource "azurerm_virtual_machine" "vm" {
   }
 }
 
+resource "azurerm_virtual_machine_extension" "ext_install_terraform" {
+  name                 = "tf-az-install-terraform-vm-ext"
+  location             = "EastUS"
+  location             = "${azurerm_resource_group.rg.location}"
+  resource_group_name  = "${azurerm_resource_group.rg.name}"
+  publisher            = "Microsoft.Compute"
+  type                 = "CustomScriptExtension"
+  type_handler_version = "1.9"
+
+  # CustomVMExtension Documetnation: https://docs.microsoft.com/en-us/azure/virtual-machines/extensions/custom-script-windows
+
+  settings = <<SETTINGS
+    {
+        "fileUris": ["https://raw.githubusercontent.com/mikebranstein/azure-build-scripts/master/terraform-workshop/Install-Terraform.ps1"]
+    }
+SETTINGS
+  protected_settings = <<PROTECTED_SETTINGS
+    {
+      "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File Install-Terraform.ps1",
+    }
+  PROTECTED_SETTINGS
+  depends_on = ["azurerm_virtual_machine.vm"]
+}
