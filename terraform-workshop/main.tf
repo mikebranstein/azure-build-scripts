@@ -64,7 +64,7 @@ resource "azurerm_virtual_machine" "vm" {
   location              = "${azurerm_resource_group.rg.location}"
   resource_group_name   = "${azurerm_resource_group.rg.name}"
   network_interface_ids = ["${azurerm_network_interface.nic.id}"]
-  vm_size               = "Standard_DS4_v3"
+  vm_size               = "Standard_DS4_v2"
 
   delete_os_disk_on_termination = true
   delete_data_disks_on_termination = true
