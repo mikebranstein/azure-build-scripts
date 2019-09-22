@@ -35,12 +35,29 @@ resource "azurerm_app_service_plan" "standard_app_plan" {
 }
 
 # App Service
-resource "azurerm_app_service" "app1_app_service" {
+resource "azurerm_app_service" "app" {
     name                = "tf-az-${local.unique_name}-app"
     location            = "East US"
     resource_group_name = "${azurerm_resource_group.rg.name}"
     app_service_plan_id = "${azurerm_app_service_plan.standard_app_plan.id}"
 }
+
+resource "null_resource" "enable_compilation" {
+    provisioner "local-exec" {
+        command = "az webapp config appsettings set --resource-group ${azurerm_resource_group.rg.name} --name ${azurerm_app_service.app.name} --settings SCM_DO_BUILD_DURING_DEPLOYMENT=true"
+    }
+
+    depends_on = [azurerm_app_service.app]
+}
+
+resource "null_resource" "deploy_app" {
+    provisioner "local-exec" {
+        command = "az webapp deployment source config-zip --resource-group ${azurerm_resource_group.rg.name} --name ${azurerm_app_service.app.name} --src app.zip"
+    }
+
+    depends_on = [azurerm_app_service.app, null_resource.enable_compilation]
+}
+
 
 # API Management
 # resource "azurerm_api_management" "apim" {
