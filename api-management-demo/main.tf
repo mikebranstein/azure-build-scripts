@@ -42,17 +42,17 @@ resource "azurerm_app_service" "app" {
     app_service_plan_id = "${azurerm_app_service_plan.standard_app_plan.id}"
 
     app_settings {
-        "SCM_DO_BUILD_DURING_DEPLOYMENT" = "true"
+        SCM_DO_BUILD_DURING_DEPLOYMENT = "true"
     }
 }
 
-resource "null_resource" "enable_compilation" {
-    provisioner "local-exec" {
-        command = "az webapp config appsettings set --resource-group ${azurerm_resource_group.rg.name} --name ${azurerm_app_service.app.name} --settings SCM_DO_BUILD_DURING_DEPLOYMENT=true"
-    }
+# resource "null_resource" "enable_compilation" {
+#     provisioner "local-exec" {
+#         command = "az webapp config appsettings set --resource-group ${azurerm_resource_group.rg.name} --name ${azurerm_app_service.app.name} --settings SCM_DO_BUILD_DURING_DEPLOYMENT=true"
+#     }
 
-    depends_on = [azurerm_app_service.app]
-}
+#     depends_on = [azurerm_app_service.app]
+# }
 
 resource "null_resource" "deploy_app" {
     provisioner "local-exec" {
