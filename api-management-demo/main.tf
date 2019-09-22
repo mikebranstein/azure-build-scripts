@@ -41,3 +41,18 @@ resource "azurerm_app_service" "app1_app_service" {
     resource_group_name = "${azurerm_resource_group.rg.name}"
     app_service_plan_id = "${azurerm_app_service_plan.standard_app_plan.id}"
 }
+
+# API Management
+# resource "azurerm_api_management" "apim" {
+#     name                = "tf-az-${local.unique_name}-apim"
+#     location            = "East US"
+#     resource_group_name = "${azurerm_resource_group.rg.name}"
+#     publisher_name      = "Contoso"
+#     publisher_email     = "contoso@microsoft.com"
+
+#     sku {
+#         name     = "Standard"
+#         capacity = 1
+#     }
+# }
+

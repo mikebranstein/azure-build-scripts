@@ -8,6 +8,12 @@
 export TF_VAR_tenant_id=$(az account list --query "[0].tenantId" -otsv) 
 export TF_VAR_subscription_id=$(az account list --query "[0].id" -otsv) 
 
+# zip up netcore app code
+cd src/ApiDemo
+zip -r app.zip .
+mv app.zip ../../app.zip
+cd ../../
+
 # run terraform
 terraform init
 terraform apply --auto-approve
