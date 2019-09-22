@@ -54,7 +54,7 @@ resource "null_resource" "deploy_app" {
     depends_on = [azurerm_app_service.app]
 }
 
-API Management
+# API Management
 resource "azurerm_api_management" "apim" {
     name                = "tf-az-${local.unique_name}-apim"
     location            = "East US"
