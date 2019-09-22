@@ -8,6 +8,9 @@
 export TF_VAR_tenant_id=$(az account list --query "[0].tenantId" -otsv) 
 export TF_VAR_subscription_id=$(az account list --query "[0].id" -otsv) 
 
+# set the default subscription
+az account set --subscription $TF_VAR_subscription_id
+
 # zip up netcore app code
 cd src/ApiDemo
 zip -r app.zip .
