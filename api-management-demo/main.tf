@@ -25,7 +25,7 @@ resource "azurerm_resource_group" "rg" {
 
 # App Service Plan
 resource "azurerm_app_service_plan" "standard_app_plan" {
-    name                = "tf-az-standard-${local.unique_name}-plan"
+    name                = "tf-az-${local.unique_name}-plan"
     location            = "East US"
     resource_group_name = "${azurerm_resource_group.rg.name}"
     sku {
