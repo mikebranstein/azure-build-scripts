@@ -63,8 +63,23 @@ resource "azurerm_api_management" "apim" {
     publisher_email     = "contoso@microsoft.com"
 
     sku {
-        name     = "Standard"
+        name     = "Developer"
         capacity = 1
     }
 }
 
+# API Service
+resource "azurerm_api_management_api" "api" {
+  name                = "banking-api"
+  resource_group_name = "${azurerm_resource_group.rg.name}"
+  api_management_name = "${azurerm_api_management.apim.name}"
+  revision            = "1"
+  display_name        = "Banking API"
+  path                = "banking"
+  protocols           = ["https"]
+
+  import {
+    content_format = "swagger-link-json"
+    content_value  = "https://${azurerm_app_service.app.default_site_hostname}/swagger/1.0.0/swagger.json"
+  }
+}
