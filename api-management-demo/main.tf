@@ -59,7 +59,7 @@ resource "null_resource" "deploy_app" {
         command = "az webapp deployment source config-zip --resource-group ${azurerm_resource_group.rg.name} --name ${azurerm_app_service.app.name} --src app.zip"
     }
 
-    depends_on = [azurerm_app_service.app, null_resource.enable_compilation]
+    depends_on = [azurerm_app_service.app]
 }
 
 
