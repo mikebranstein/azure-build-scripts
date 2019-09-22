@@ -37,7 +37,7 @@ resource "azurerm_app_service_plan" "standard_app_plan" {
 # App Service
 resource "azurerm_app_service" "app1_app_service" {
     name                = "tf-az-${local.unique_name}-app"
-    location            = "${var.location}"
+    location            = "East US"
     resource_group_name = "${azurerm_resource_group.rg.name}"
     app_service_plan_id = "${azurerm_app_service_plan.standard_app_plan.id}"
 }
