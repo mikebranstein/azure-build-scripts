@@ -46,14 +46,6 @@ resource "azurerm_app_service" "app" {
     }
 }
 
-# resource "null_resource" "enable_compilation" {
-#     provisioner "local-exec" {
-#         command = "az webapp config appsettings set --resource-group ${azurerm_resource_group.rg.name} --name ${azurerm_app_service.app.name} --settings SCM_DO_BUILD_DURING_DEPLOYMENT=true"
-#     }
-
-#     depends_on = [azurerm_app_service.app]
-# }
-
 resource "null_resource" "deploy_app" {
     provisioner "local-exec" {
         command = "az webapp deployment source config-zip --resource-group ${azurerm_resource_group.rg.name} --name ${azurerm_app_service.app.name} --src app.zip"
@@ -62,18 +54,17 @@ resource "null_resource" "deploy_app" {
     depends_on = [azurerm_app_service.app]
 }
 
+API Management
+resource "azurerm_api_management" "apim" {
+    name                = "tf-az-${local.unique_name}-apim"
+    location            = "East US"
+    resource_group_name = "${azurerm_resource_group.rg.name}"
+    publisher_name      = "Contoso"
+    publisher_email     = "contoso@microsoft.com"
 
-# API Management
-# resource "azurerm_api_management" "apim" {
-#     name                = "tf-az-${local.unique_name}-apim"
-#     location            = "East US"
-#     resource_group_name = "${azurerm_resource_group.rg.name}"
-#     publisher_name      = "Contoso"
-#     publisher_email     = "contoso@microsoft.com"
-
-#     sku {
-#         name     = "Standard"
-#         capacity = 1
-#     }
-# }
+    sku {
+        name     = "Standard"
+        capacity = 1
+    }
+}
 
