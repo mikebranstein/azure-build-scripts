@@ -42,6 +42,9 @@ Because it works and is easy to install common packages with it on Windows.
 Each workshop I run will have a sub-folder in the repo. They each contain 3 files:
 1. build.sh: the main script that kicks off the Terraform provisioning process
 2. main.tf: the Terraform file with the infrastructure I need for the workshop 
-3. Install-Prereqs.ps1: a PowerShell script to install chocolatey and then other pre-req software 
 
 At the top of the build.sh will is a brief script. To trigger the process, have attendees open the Cloud Shell (bash), paste the script into Cloud Shell, press *Enter*, then wait.
+
+## How to execute the scripts
+
+Within each, check out the README.md which indicates how to run the script from the Azure Cloud Shell.
