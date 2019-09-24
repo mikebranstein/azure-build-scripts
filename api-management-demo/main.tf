@@ -2,6 +2,12 @@ variable "tenant_id" { }
 variable "subscription_id" { }
 variable "base_name" { default = "api-mgmt-demo" }
 
+provider "azurerm" {
+    tenant_id       = "${var.tenant_id}"
+    subscription_id = "${var.subscription_id}" 
+    #use_msi         = true
+}
+
 resource "random_integer" "ri" {
     min = 10000
     max = 99999
@@ -9,13 +15,6 @@ resource "random_integer" "ri" {
 
 locals {
     unique_name = "${var.base_name}${random_integer.ri.result}"
-}
-
-
-provider "azurerm" {
-    tenant_id       = "${var.tenant_id}"
-    subscription_id = "${var.subscription_id}" 
-    use_msi         = true
 }
 
 resource "azurerm_resource_group" "rg" {
@@ -66,20 +65,4 @@ resource "azurerm_api_management" "apim" {
         name     = "Developer"
         capacity = 1
     }
-}
-
-# API Service
-resource "azurerm_api_management_api" "api" {
-  name                = "banking-api"
-  resource_group_name = "${azurerm_resource_group.rg.name}"
-  api_management_name = "${azurerm_api_management.apim.name}"
-  revision            = "1"
-  display_name        = "Banking API"
-  path                = "banking"
-  protocols           = ["https"]
-
-  import {
-    content_format = "swagger-link-json"
-    content_value  = "https://${azurerm_app_service.app.default_site_hostname}/swagger/1.0.0/swagger.json"
-  }
 }
