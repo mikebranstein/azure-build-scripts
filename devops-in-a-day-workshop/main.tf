@@ -5,9 +5,10 @@ variable "location" { default = "East US" }
 variable "vm_base_name" { default = "workshop" }
 
 provider "azurerm" {
-    tenant_id       = "${var.tenant_id}"
-    subscription_id = "${var.subscription_id}" 
-    use_msi         = true
+    tenant_id                   = "${var.tenant_id}"
+    subscription_id             = "${var.subscription_id}" 
+    use_msi                     = true
+    skip_provider_registration  = true
 }
 
 locals {
@@ -79,7 +80,7 @@ resource "azurerm_virtual_machine" "vm" {
       provision_vm_agent = true
   }
   identity {
-    type = "SystemAssigned"
+    type = "SystemAssigned "
   }
 }
 
