@@ -67,7 +67,7 @@ resource "azurerm_virtual_machine" "vm" {
   }
   storage_os_disk {
     name              = "tfaz${var.vm_base_name}vmdisk01"
-    caching           = "Read"
+    caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "StandardSSD_LRS"
   }
