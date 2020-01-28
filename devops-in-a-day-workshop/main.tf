@@ -80,7 +80,7 @@ resource "azurerm_virtual_machine" "vm" {
       provision_vm_agent = true
   }
   identity {
-    type = "SystemAssigned "
+    type = "SystemAssigned"
   }
 }
 
