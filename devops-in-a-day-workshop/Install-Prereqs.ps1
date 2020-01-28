@@ -12,3 +12,6 @@ choco install vscode -y
 
 # Microsoft Teams
 choco install microsoft-teams -y
+
+# Chrome
+choco install googlechrome -y
