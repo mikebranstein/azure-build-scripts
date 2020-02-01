@@ -60,9 +60,9 @@ resource "azurerm_virtual_machine" "vm" {
   delete_data_disks_on_termination = true
 
   storage_image_reference {
-    publisher = "MicrosoftWindowsServer"
-    offer     = "WindowsServer"
-    sku       = "2019-Datacenter"
+    publisher = "MicrosoftVisualStudio"
+    offer     = "visualstudio2019latest"
+    sku       = "vs-2019-comm-latest-win10-n"
     version   = "latest"
   }
   storage_os_disk {
