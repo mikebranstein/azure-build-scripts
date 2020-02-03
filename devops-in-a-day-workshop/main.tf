@@ -88,13 +88,13 @@ resource "azurerm_virtual_machine" "vm" {
   }
 }
 
-resource "azurerm_role_assignment" "example" {
+resource "azurerm_role_assignment" "ra_contrib" {
   scope                = "${data.azurerm_resource_group.rg.id}"
   role_definition_name = "Contributor"
   principal_id         = "${azurerm_virtual_machine.vm.identity.0.principal_id}"
 }
 
-resource "azurerm_role_assignment" "example" {
+resource "azurerm_role_assignment" "ra_sa_contrib" {
   scope                = "${data.azurerm_resource_group.rg.id}"
   role_definition_name = "Storage Account Contributor"
   principal_id         = "${azurerm_virtual_machine.vm.identity.0.principal_id}"
