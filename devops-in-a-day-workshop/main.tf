@@ -15,6 +15,10 @@ locals {
     random_hash = substr(md5(var.resource_group_name), 0, 5)
 }
 
+data "azurerm_resource_group" "rg" {
+  name = "${var.resource_group_name}"
+}
+
 resource "azurerm_virtual_network" "vnet" {
   name                = "tf-az-${var.vm_base_name}-nvet"
   address_space       = ["10.0.0.0/16"]
@@ -82,6 +86,18 @@ resource "azurerm_virtual_machine" "vm" {
   identity {
     type = "SystemAssigned"
   }
+}
+
+resource "azurerm_role_assignment" "example" {
+  scope                = "${data.azurerm_resource_group.rg.id}"
+  role_definition_name = "Contributor"
+  principal_id         = "${azurerm_virtual_machine.vm.identity.0.principal_id}"
+}
+
+resource "azurerm_role_assignment" "example" {
+  scope                = "${data.azurerm_resource_group.rg.id}"
+  role_definition_name = "Storage Account Contributor"
+  principal_id         = "${azurerm_virtual_machine.vm.identity.0.principal_id}"
 }
 
 resource "azurerm_virtual_machine_extension" "ext_install_prereqs" {
