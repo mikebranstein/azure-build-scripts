@@ -10,8 +10,9 @@ choco install terraform -y
 # Visual Studio Code
 choco install vscode -y
 
-# Microsoft Teams
-choco install microsoft-teams -y
-
 # Chrome
-choco install googlechrome -y
+choco install googlechrome
+
+# Microsoft Teams
+choco install microsoft-teams
+
