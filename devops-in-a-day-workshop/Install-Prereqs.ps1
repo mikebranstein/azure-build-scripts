@@ -11,8 +11,8 @@ choco install terraform -y
 choco install vscode -y
 
 # Chrome
-choco install googlechrome
+choco install googlechrome -y
 
 # Microsoft Teams
-choco install microsoft-teams
+choco install microsoft-teams -y
 
