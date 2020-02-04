@@ -13,6 +13,9 @@ choco install vscode -y
 # Chrome
 choco install googlechrome -y
 
+# .NET Core SDK
+choco install dotnetcore-sdk -y
+
 # Microsoft Teams
 choco install microsoft-teams -y
 
