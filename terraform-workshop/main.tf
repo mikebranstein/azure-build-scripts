@@ -39,7 +39,7 @@ resource "azurerm_subnet" "subnet" {
   name                 = "default"
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefix       = ["10.0.0.0/24"]
+  address_prefixes     = ["10.0.0.0/24"]
 }
 
 resource "azurerm_network_interface" "nic" {
@@ -96,12 +96,10 @@ resource "azurerm_virtual_machine" "vm" {
 
 resource "azurerm_virtual_machine_extension" "ext_install_prereqs" {
   name                 = "tf-az-install-prereqs-vm-ext"
-  location             = azurerm_resource_group.rg.location
-  resource_group_name  = azurerm_resource_group.rg.name
-  virtual_machine_name = azurerm_virtual_machine.vm.name
-  publisher            = "Microsoft.Compute"
-  type                 = "CustomScriptExtension"
-  type_handler_version = "1.9"
+  virtual_machine_id   = azurerm_virtual_machine.vm.id
+  publisher            = "Microsoft.Azure.Extensions"
+  type                 = "CustomScript"
+  type_handler_version = "2.0"
 
   # CustomVMExtension Documentation: https://docs.microsoft.com/en-us/azure/virtual-machines/extensions/custom-script-windows
 
