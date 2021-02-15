@@ -98,9 +98,9 @@ resource "azurerm_virtual_machine" "vm" {
 resource "azurerm_virtual_machine_extension" "ext_install_prereqs" {
   name                 = "tf-az-install-prereqs-vm-ext"
   virtual_machine_id   = azurerm_virtual_machine.vm.id
-  publisher            = "Microsoft.Azure.Extensions"
-  type                 = "CustomScript"
-  type_handler_version = "2.0"
+  publisher            = "Microsoft.Compute"
+  type                 = "CustomScriptExtension"
+  type_handler_version = "1.10"
 
   # CustomVMExtension Documentation: https://docs.microsoft.com/en-us/azure/virtual-machines/extensions/custom-script-windows
 
