@@ -1,62 +1,73 @@
+terraform {
+  required_version = "~>0.14"
+  required_providers {
+    azurerm = {
+      source = "hashicorp/azurerm"
+      version = "=2.45.1"
+    }
+  }
+}
+
+provider "azurerm" {
+  features {}
+  tenant_id       = var.tenant_id
+  subscription_id = var.subscription_id
+  use_msi         = true
+}
+
 variable "tenant_id" { }
 variable "subscription_id" { }
 variable "vm_base_name" { default = "workshop" }
 
-provider "azurerm" {
-    tenant_id       = "${var.tenant_id}"
-    subscription_id = "${var.subscription_id}" 
-    use_msi         = true
+locals {
+  random_hash = substr(md5(azurerm_resource_group.rg.id), 0, 5)
 }
 
 resource "azurerm_resource_group" "rg" {
-    name = "tf-az-${var.vm_base_name}-rg"
-    location = "East US"
-}
-
-locals {
-    random_hash = substr(md5(azurerm_resource_group.rg.id), 0, 5)
+  name = "tf-az-${var.vm_base_name}-rg"
+  location = "East US"
 }
 
 resource "azurerm_virtual_network" "vnet" {
   name                = "tf-az-${var.vm_base_name}-nvet"
   address_space       = ["10.0.0.0/16"]
-  location            = "${azurerm_resource_group.rg.location}"
-  resource_group_name = "${azurerm_resource_group.rg.name}"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
 }
 
 resource "azurerm_subnet" "subnet" {
   name                 = "default"
-  resource_group_name  = "${azurerm_resource_group.rg.name}"
-  virtual_network_name = "${azurerm_virtual_network.vnet.name}"
-  address_prefix       = "10.0.0.0/24"
+  resource_group_name  = azurerm_resource_group.rg.name
+  virtual_network_name = azurerm_virtual_network.vnet.name
+  address_prefix       = ["10.0.0.0/24"]
 }
 
 resource "azurerm_network_interface" "nic" {
   name                = "tf-az-${var.vm_base_name}-vm-nic"
-  location            = "${azurerm_resource_group.rg.location}"
-  resource_group_name = "${azurerm_resource_group.rg.name}"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
 
   ip_configuration {
     name                          = "tf-az-${var.vm_base_name}-vm-nic-ip-config"
-    subnet_id                     = "${azurerm_subnet.subnet.id}"
+    subnet_id                     = azurerm_subnet.subnet.id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = "${azurerm_public_ip.pip.id}"
+    public_ip_address_id          = azurerm_public_ip.pip.id
   }
 }
 
 resource "azurerm_public_ip" "pip" {
   name                = "tf-az-${var.vm_base_name}-vm-pip"
-  location            = "${azurerm_resource_group.rg.location}"
-  resource_group_name = "${azurerm_resource_group.rg.name}"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
   allocation_method   = "Dynamic"
 }
 
 resource "azurerm_virtual_machine" "vm" {
   name                  = "tf-az-${var.vm_base_name}-vm"
-  location              = "${azurerm_resource_group.rg.location}"
-  resource_group_name   = "${azurerm_resource_group.rg.name}"
-  network_interface_ids = ["${azurerm_network_interface.nic.id}"]
-  vm_size               = "Standard_DS4_v2"
+  location              = azurerm_resource_group.rg.location
+  resource_group_name   = azurerm_resource_group.rg.name
+  network_interface_ids = [azurerm_network_interface.nic.id]
+  vm_size               = "Standard_DS4_v3"
 
   delete_os_disk_on_termination = true
   delete_data_disks_on_termination = true
@@ -79,20 +90,20 @@ resource "azurerm_virtual_machine" "vm" {
     admin_password = "P.$$w0rd1234"
   }
   os_profile_windows_config {
-      provision_vm_agent = true
+    provision_vm_agent = true
   }
 }
 
 resource "azurerm_virtual_machine_extension" "ext_install_prereqs" {
   name                 = "tf-az-install-prereqs-vm-ext"
-  location             = "${azurerm_resource_group.rg.location}"
-  resource_group_name  = "${azurerm_resource_group.rg.name}"
-  virtual_machine_name = "${azurerm_virtual_machine.vm.name}"
+  location             = azurerm_resource_group.rg.location
+  resource_group_name  = azurerm_resource_group.rg.name
+  virtual_machine_name = azurerm_virtual_machine.vm.name
   publisher            = "Microsoft.Compute"
   type                 = "CustomScriptExtension"
   type_handler_version = "1.9"
 
-  # CustomVMExtension Documetnation: https://docs.microsoft.com/en-us/azure/virtual-machines/extensions/custom-script-windows
+  # CustomVMExtension Documentation: https://docs.microsoft.com/en-us/azure/virtual-machines/extensions/custom-script-windows
 
   settings = <<SETTINGS
     {
@@ -104,5 +115,4 @@ SETTINGS
       "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File Install-Prereqs.ps1"
     }
 PROTECTED_SETTINGS
-  depends_on = ["azurerm_virtual_machine.vm"]
 }
