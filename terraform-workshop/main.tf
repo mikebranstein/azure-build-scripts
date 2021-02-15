@@ -3,15 +3,15 @@ terraform {
   required_providers {
     azurerm = {
       source = "hashicorp/azurerm"
-      version = "=2.45.1"
+      version = "=2.43"
     }
   }
 }
 
 provider "azurerm" {
   features {}
-  tenant_id                   = var.tenant_id
-  subscription_id             = var.subscription_id
+  tenant_id                 = var.tenant_id
+  subscription_id           = var.subscription_id
   use_msi                     = true
   skip_provider_registration  = true
 }
