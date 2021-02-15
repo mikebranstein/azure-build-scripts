@@ -8,7 +8,7 @@
 export TF_VAR_tenant_id=$(az account list --query "[?isDefault].tenantId" -otsv) 
 export TF_VAR_subscription_id=$(az account list --query "[?isDefault].id" -otsv) 
 echo "Tenant Id: $TF_VAR_tenant_id"
-echo "Subscription Id: TF_VAR_subscription_id"
+echo "Subscription Id: $TF_VAR_subscription_id"
 
 # run terraform
 terraform init
